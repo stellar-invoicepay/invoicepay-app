@@ -1,35 +1,31 @@
-# invoicepay — invoices on Stellar testnet
+# InvoicePay app - incomplete
 
-Status: **scaffold only.** No contract, no app, no book has been written yet.
-Testnet only, no real money, **no pilot has happened**, and this project has
-never run against a deployed contract. Do not use it with real funds.
+This repository contains an unfinished Vite, React and TypeScript scaffold for
+freelancer invoices on Stellar testnet. It is **not a runnable application or a
+submission candidate**. Full app implementation is deferred until after the
+October 9 submission work on the implemented projects.
 
-invoicepay is a Stellar/Soroban project in three repositories:
+The sibling `invoicepay-contracts` repository has an implemented Rust contract;
+that does not imply this app is usable. `invoicepay-docs` remains a documentation
+scaffold. No pilot has happened, and this app has never used a deployed contract
+or real wallet. Testnet only; never use real funds.
 
-| Repo | Purpose | Status |
-|---|---|---|
-| `invoicepay-contracts` | Soroban contract (Rust) | scaffold only |
-| `invoicepay-app` | web app (Vite + React + TypeScript) | scaffold only |
-| `invoicepay-docs` | mdBook documentation | scaffold only |
+## Existing files
 
+The scaffold includes configuration, validation and error helpers, wallet module
+configuration with local icons, shared components and a pending-action hook.
+The package and lockfile identify `invoicepay-app`. The error mapping and
+[vendored table](docs/contract-errors.md) use the sibling contract's `ERRORS.md`.
+These files are starting points, not a complete product.
 
-## What is here now
+## Missing before the app can run
 
-Repository governance only, adapted from the completed `schoolfees` project:
-[AGENTS.md](AGENTS.md) (the rulebook for agents and humans),
-[CONTRIBUTING.md](CONTRIBUTING.md), [ROADMAP.md](ROADMAP.md) (what v0 will be,
-from the project's playbook section), MIT [LICENSE](LICENSE), `.gitignore`,
-`.gitattributes` (LF everywhere). No code yet; the first CI workflow lands
-with the first code that can pass it.
+- HTML entry, React entry and application root, routing and styles.
+- InvoicePay contract ABI and RPC integration.
+- Freelancer and client invoice pages, payment, cancellation and receipt flows.
+- Unit and accessible render tests, test setup and CI.
+- Environment example and reproducible setup instructions.
 
-## What v0 will be
-
-See [ROADMAP.md](ROADMAP.md). The scope is defined in the project's section of
-the build playbook; it is not invented here.
-
-## Honest limitations
-
-- Nothing is implemented, tested, audited or deployed.
-- The contract has never been compiled; the app has never run; the book has
-  never been built.
-- No pilot has happened and none is claimed anywhere in these repositories.
+The package scripts describe intended checks. No successful app build, test run,
+deployment or wallet transaction is claimed. See [ROADMAP.md](ROADMAP.md) for
+remaining scope and [AGENTS.md](AGENTS.md) for privacy and signing rules.

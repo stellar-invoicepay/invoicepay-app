@@ -1,46 +1,33 @@
-# Roadmap
+# InvoicePay app roadmap
 
-What is next for `invoicepay-app`, in order. Anything not listed as done is
-**not implemented**.
+Status on October 7, 2026: partial scaffold, not runnable. Full app work is
+deferred beyond this submission window; the contract is assessed independently.
 
-## Status
+## Present
 
-- [x] Repository governance: AGENTS.md, CONTRIBUTING.md, ROADMAP.md, LICENSE,
-      .gitignore, .gitattributes (2026-10-01).
-- [ ] v0 app from the project's playbook section (screens below).
+- Repository governance and package configuration.
+- Shared helper, wallet configuration and component source as starting points.
+- Package identity and canonical InvoicePay contract error messages.
 
-## Next
+Presence of source does not establish correctness: the app has no completed test
+suite, build or deployed-wallet verification.
 
-- [ ] Vite + React + TypeScript scaffold, strict mode, `.env`-only
-      configuration, testnet refusal paths.
-- [ ] Pages per `STELLAR-BUILD-PLAYBOOK-v3.md` section 6 (shared app
-      prompt in section 4; file present in
-      `~/Desktop/Drips/_reference/playbooks/`, confirmed 2026-10-02):
-      TESTNET banner on every screen, error mapping from the contract repo's
-      `ERRORS.md`, transaction hash and explorer link after every action,
-      local wallet icons, Stellar-only wallet kit module set, mobile-first
-      accessible markup.
-- [ ] Unit tests for pure logic in `src/lib/`; render tests with an automated
-      axe-core check (the schoolfees standard).
-- [ ] CI (`web.yml`): lint, type-check, tests, production build. Lands with
-      the first code that can pass it.
+## Required for v0
 
-## v0 screens (from playbook section 6)
+- [ ] HTML and React entries, app root, styles and routing.
+- [ ] InvoicePay ABI and invocation integration using environment configuration.
+- [ ] Freelancer creates invoices, views status and payments, and cancels.
+- [ ] Client opens invoices by id, makes full or partial payment and views receipts.
+- [ ] Visible TESTNET banner, wrong-network refusal, hashes and explorer links.
+- [ ] No personal data in chain payloads; wallets sign without exposing keys.
+- [ ] Environment example, setup instructions, unit and accessible render tests, CI.
+- [ ] Validate lint, type checking, tests and production build before claiming readiness.
 
-- Freelancer: create an invoice, see status and payments, cancel.
-- Client: open an invoice by id, pay all or part, see the receipt.
+Scope follows `_reference/playbooks/STELLAR-BUILD-PLAYBOOK-v3.md`, section 6,
+with v4 and SchoolFees as implementation standards. Mainnet, backend, database,
+analytics, trackers, CSV export, share links and emails are outside v0.
 
-Known app gaps, deliberately out of v0: CSV export of receipts for record
-keeping, shareable pay links (research SEP-7 first), email notifications
-(off-chain).
+## Human decisions
 
-## Decisions needed from Tim
-
-1. **Build standard — decided (2026-10-02).** v3 sections 4 and 6 are the
-   scope authority for what the app shows; v4 plus the schoolfees repos are
-   the standard for how it is built (doc set, AGENTS.md, CI, checkers).
-
-## Explicitly out of scope
-
-Mainnet, any backend or database, analytics or trackers. Anything the v0
-design does not ask for.
+Confirm a real pilot partner and testnet deployment plan before deployment.
+No partner, pilot, live transaction or outcome is claimed.
