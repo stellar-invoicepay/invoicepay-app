@@ -93,6 +93,7 @@ export interface MappedError {
   readonly message: string;
   readonly nextAction?: string;
   readonly code?: number;
+  readonly transactionHash?: string;
 }
 
 /** Pulls the message text out of whatever was thrown. */
@@ -148,7 +149,10 @@ export function describeContractError(error: unknown): MappedError {
   }
 
   if (text !== '') {
-    return { message: text };
+    const transactionHash = error !== null && typeof error === 'object' && 'transactionHash' in error ? error.transactionHash : undefined;
+    return typeof transactionHash === 'string' && /^[0-9a-f]{64}$/i.test(transactionHash)
+      ? { message: text, transactionHash }
+      : { message: text };
   }
   return { message: GENERIC_ERROR_MESSAGE };
 }

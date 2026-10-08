@@ -1,85 +1,87 @@
-import { useCallback, useEffect, useState } from 'react';
-
-import {
-  checkWalletNetwork,
-  connectWallet,
-  disconnectWallet,
-  initWallet,
-  rememberedAddress,
-} from '../lib/wallet';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { checkWalletNetwork, connectWallet, disconnectWallet, rememberedAddress } from '../lib/wallet';
+import { describeContractError } from '../lib/contractErrors';
 
 export interface WalletController {
   readonly address: string | null;
   readonly connecting: boolean;
   readonly error: string | null;
-  /** null until the wallet has been asked; false blocks every write. */
   readonly onTestnet: boolean | null;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   refreshNetwork: () => Promise<boolean>;
 }
 
-/**
- * Wallet state for the app.
- *
- * The app only ever learns a public address here. No secret key or seed phrase
- * is requested, received, stored or logged anywhere in this hook or the adapter
- * under it.
- */
+/** Only public addresses are retained. Abandoned requests cannot restore a session. */
 export function useWallet(): WalletController {
   const [address, setAddress] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [onTestnet, setOnTestnet] = useState<boolean | null>(null);
+  const mounted = useRef(true);
+  const generation = useRef(0);
+  const networkRequest = useRef(0);
+  const connectingRef = useRef(false);
+  const disconnecting = useRef(false);
 
   const refreshNetwork = useCallback(async (): Promise<boolean> => {
-    try {
-      const network = await checkWalletNetwork();
-      setOnTestnet(network.onTestnet);
-      return network.onTestnet;
-    } catch {
-      // A wallet that cannot report its network must not be trusted.
-      setOnTestnet(false);
-      return false;
-    }
+    const session = generation.current;
+    const request = ++networkRequest.current;
+    let valid = false;
+    try { valid = (await checkWalletNetwork()).onTestnet; } catch { /* fail closed */ }
+    if (!mounted.current || session !== generation.current || request !== networkRequest.current) return false;
+    setOnTestnet(valid);
+    return valid;
   }, []);
 
-  // On load, remember an address the wallet already authorised and re-check the
-  // network, so a returning session cannot silently be on the wrong chain.
   useEffect(() => {
-    initWallet();
+    mounted.current = true;
+    const session = ++generation.current;
     void (async () => {
-      const existing = await rememberedAddress();
-      if (existing !== null) {
+      try {
+        const existing = await rememberedAddress();
+        if (!mounted.current || session !== generation.current || existing === null) return;
         setAddress(existing);
         await refreshNetwork();
+      } catch {
+        if (mounted.current && session === generation.current) setOnTestnet(false);
       }
     })();
+    return () => { mounted.current = false; generation.current += 1; };
   }, [refreshNetwork]);
 
   const connect = useCallback(async () => {
+    if (!mounted.current || connectingRef.current || disconnecting.current) return;
+    connectingRef.current = true;
+    const session = ++generation.current;
     setConnecting(true);
     setError(null);
+    setOnTestnet(null);
     try {
       const connected = await connectWallet();
+      if (!mounted.current || session !== generation.current) return;
       setAddress(connected);
       await refreshNetwork();
     } catch (thrown) {
-      setError(thrown instanceof Error ? thrown.message : 'The wallet did not connect.');
+      if (mounted.current && session === generation.current) {
+        setError(describeContractError(thrown).message);
+      }
     } finally {
-      setConnecting(false);
+      connectingRef.current = false;
+      if (mounted.current) setConnecting(false);
     }
   }, [refreshNetwork]);
 
   const disconnect = useCallback(async () => {
+    if (!mounted.current || disconnecting.current) return;
+    disconnecting.current = true;
+    generation.current += 1;
     setError(null);
-    try {
-      await disconnectWallet();
-    } catch {
-      // Nothing useful to show: the kit clears its own state either way.
-    }
     setAddress(null);
     setOnTestnet(null);
+    setConnecting(false);
+    try { await disconnectWallet(); } catch { /* local state stays disconnected */ }
+    finally { disconnecting.current = false; }
   }, []);
 
   return { address, connecting, error, onTestnet, connect, disconnect, refreshNetwork };

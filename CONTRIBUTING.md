@@ -7,8 +7,9 @@ is a shorter orientation.
 ## Before you change anything
 
 - **Testnet only.** Never write anything that suggests mainnet use.
-- **Nothing is deployed and no pilot has happened.** Do not describe a
-  deployment, a contract id, a user, a tester or a result that does not exist.
+- **Synthetic testnet deployment only; no real pilot has happened.** Use the
+  [public deployment record](docs/testnet-deployment.md), and never invent users,
+  partners or successful browser transactions.
 - **No personal data, ever** — not in examples, not in tests, not in issue
   drafts. Use obvious placeholders.
 - **Never commit `.env`**, a secret key or a seed phrase.
@@ -22,6 +23,7 @@ is a shorter orientation.
 
 ## Checks to run before you push
 
-Once this repo has code, its checks are listed in `AGENTS.md` and run in CI.
-A change that breaks any of them is not ready. Until then, keep commits to
-documentation and hygiene so the history stays honest.
+Run `npm run lint`, `npm run typecheck`, `npm test` and `npm run build`.
+Tests use one threads worker to bound memory use. Record actual local results;
+do not call a configured workflow a passing remote CI run. Exercise synthetic
+wallet flows separately before describing any network interaction as verified.

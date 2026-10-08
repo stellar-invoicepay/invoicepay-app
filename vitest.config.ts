@@ -6,6 +6,8 @@ import { defineConfig } from 'vitest/config';
 // a wallet, or a real contract.
 export default defineConfig({
   test: {
+    pool: 'threads',
+    maxWorkers: 1,
     environment: 'node',
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
   },

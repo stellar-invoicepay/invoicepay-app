@@ -1,31 +1,73 @@
-# InvoicePay app - incomplete
+# InvoicePay app
 
-This repository contains an unfinished Vite, React and TypeScript scaffold for
-freelancer invoices on Stellar testnet. It is **not a runnable application or a
-submission candidate**. Full app implementation is deferred until after the
-October 9 submission work on the implemented projects.
+A Vite, React and TypeScript workspace for opaque invoices on Stellar testnet.
+Implemented flows: create, invoice/receipt lookup, partial payment, cancellation
+before any payment, and freelancer refunds. The app uses the sibling contract's
+actual six-method ABI. Tokens move directly between payer and freelancer.
 
-The sibling `invoicepay-contracts` repository has an implemented Rust contract;
-that does not imply this app is usable. `invoicepay-docs` remains a documentation
-scaffold. No pilot has happened, and this app has never used a deployed contract
-or real wallet. Testnet only; never use real funds.
+**TESTNET - no real money. No real business pilot has happened.** A synthetic
+contract demonstration deployment exists; the browser-to-wallet payment flow
+still needs a manual test. Deployment does not establish adoption, security for
+real funds or completed browser transactions.
 
-## Existing files
+## Run locally
 
-The scaffold includes configuration, validation and error helpers, wallet module
-configuration with local icons, shared components and a pending-action hook.
-The package and lockfile identify `invoicepay-app`. The error mapping and
-[vendored table](docs/contract-errors.md) use the sibling contract's `ERRORS.md`.
-These files are starting points, not a complete product.
+Use Node 24. Run `npm ci`, copy [.env.example](.env.example) to a local `.env`,
+and fill in the public contract ID from the [deployment record](docs/testnet-deployment.md).
+Keep the network as `testnet`. Never put a private key or seed phrase in Vite
+environment variables. Run `npm run dev` and connect a funded testnet wallet.
+Missing or non-testnet configuration disables the workspace.
 
-## Missing before the app can run
+```sh
+npm ci
+npm run dev
+```
 
-- HTML entry, React entry and application root, routing and styles.
-- InvoicePay contract ABI and RPC integration.
-- Freelancer and client invoice pages, payment, cancellation and receipt flows.
-- Unit and accessible render tests, test setup and CI.
-- Environment example and reproducible setup instructions.
+Amounts are whole numbers in the token's **smallest units**. The app does not
+fetch decimals, create trustlines or check balances. Verify these separately.
+For a seven-decimal token, `10000000` raw units equals one token. Enter a testnet
+SEP-41 token contract, not an asset ticker.
 
-The package scripts describe intended checks. No successful app build, test run,
-deployment or wallet transaction is claimed. See [ROADMAP.md](ROADMAP.md) for
-remaining scope and [AGENTS.md](AGENTS.md) for privacy and signing rules.
+Keep documents off-chain. Enter only a 64-character hexadecimal opaque hash;
+never names, invoice numbers, email addresses, phone numbers or personal IDs.
+A public hash does not anonymize predictable content.
+
+## Verify locally
+
+```sh
+npm run lint
+npm run typecheck
+npm test -- --maxWorkers=1
+npm run build
+```
+
+Tests cover validation limits, error wording, decoded invoice state, testnet and
+session guards, pending-action lifecycle, lookup behavior and accessible labels.
+Wallet and RPC tests are mocked. DOM axe checks exclude rendered color contrast.
+The [CI workflow](.github/workflows/web.yml) runs these commands; configuring it
+does not establish that remote CI has passed.
+
+Local verification on October 8, 2026: lint, type checking, **53 tests in eight
+files**, and production build passed. Tests use one threads worker. The main
+JavaScript chunk remains 793.23 kB (187.00 kB gzip), so Vite reports its 500 kB
+chunk warning. Manual wallet and real-user testing remain separate.
+`npm audit` reports 19 dependency advisories: 13 low and six moderate, with no
+high or critical advisories. They remain unresolved; no forced dependency
+upgrade was applied.
+
+## Source and limitations
+
+- [Workspace UI](src/pages/Workspace.tsx) exposes implemented contract actions.
+- [Contract client](src/lib/contract.ts) simulates and assembles reads and writes,
+  returning confirmed transaction hashes with explorer links.
+- [Write flow](src/lib/flow.ts) checks testnet twice and rejects abandoned sessions
+  before signing or submission. Disconnecting cannot cancel submitted transactions.
+- [Error mapping](src/lib/contractErrors.ts) matches the [vendored table](docs/contract-errors.md).
+- No backend, analytics, invoice PDF, notifications, platform fees, invoice
+  discovery, pagination, archived-record restoration or mainnet support.
+- Addresses, amounts, due dates, hashes and receipts remain public.
+- Testnet resets can remove contracts and transaction history.
+
+See [ROADMAP.md](ROADMAP.md), [AGENTS.md](AGENTS.md) and the sibling
+`invoicepay-docs` book. Automated tests do not replace manual wallet, device,
+screen-reader and demonstration testing.

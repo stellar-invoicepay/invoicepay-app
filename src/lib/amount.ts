@@ -3,7 +3,7 @@ export type AmountResult =
   | { readonly ok: false; readonly message: string };
 
 /**
- * Parses a fee amount.
+ * Parses an invoice amount.
  *
  * The contract stores amounts as raw `i128` integers and the app does not fetch
  * a token's decimals in v0, so an amount here is a whole number of the token's
@@ -23,6 +23,7 @@ export function parsePositiveAmount(input: string): AmountResult {
       // Same wording as the contract's InvalidAmount message in ERRORS.md.
       return { ok: false, message: 'Enter an amount greater than zero.' };
     }
+    if (value > (1n << 127n) - 1n) return { ok: false, message: 'The amount exceeds the contract’s supported range.' };
     return { ok: true, value };
   }
 

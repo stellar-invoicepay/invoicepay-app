@@ -10,9 +10,9 @@ export const REFERENCE_HEX_LENGTH = REFERENCE_BYTES * 2;
  * so a mistake here is permanent and public.
  */
 export const REFERENCE_WARNING =
-  'Never enter a name, phone number, email address, student or member id, or ' +
+  'Never enter a name, phone number, email address, client or invoice identifiers, or ' +
   'anything else about a person. Use an opaque value — for example a hash your ' +
-  'school computed from its own internal record — so the reference means ' +
+  'freelancer computed from an off-chain document — so the reference means ' +
   'nothing to anyone reading the public ledger.';
 
 export const REFERENCE_HINT = `Exactly ${REFERENCE_HEX_LENGTH} hexadecimal characters (32 bytes).`;
@@ -63,7 +63,7 @@ export function formatReference(hex: string, edge = 8): string {
   return `0x${hex.slice(0, edge)}…${hex.slice(-edge)}`;
 }
 
-/** Renders stored reference bytes as the hex form a school would have entered. */
+/** Renders stored document hash bytes in the submitted hexadecimal form. */
 export function bytesToHex(bytes: Uint8Array): string {
   return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
 }

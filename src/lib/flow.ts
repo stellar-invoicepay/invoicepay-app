@@ -30,13 +30,21 @@ export async function runWrite(
   address: string,
   passphrase: string,
   prepare: () => Promise<PreparedCall>,
+  assertCurrent: () => void = () => {},
 ): Promise<SubmitResult> {
+  assertCurrent();
   const network = await checkWalletNetwork();
+  assertCurrent();
   if (!network.onTestnet) {
     throw new WrongNetworkError(network.passphrase);
   }
 
   const prepared = await prepare();
+  assertCurrent();
+  const beforeSign = await checkWalletNetwork();
+  assertCurrent();
+  if (!beforeSign.onTestnet) throw new WrongNetworkError(beforeSign.passphrase);
   const signedXdr = await signWithWallet(prepared.xdr, address, passphrase);
+  assertCurrent();
   return client.submit(signedXdr);
 }

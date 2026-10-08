@@ -4,7 +4,7 @@
  * (`env.ledger().timestamp()`). Returns `null` when the value is not a date.
  *
  * The input is interpreted in the user's local time zone, because that is what
- * a school means when it types a due date.
+ * a freelancer means when entering a due date.
  */
 export function unixSecondsFromLocalInput(value: string): number | null {
   const trimmed = value.trim();
