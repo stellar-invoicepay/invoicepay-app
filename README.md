@@ -6,6 +6,16 @@
 </picture>
 
 A Vite, React and TypeScript workspace for opaque invoices on Stellar testnet.
+The opening overview explains the payment flow; **Open invoice workspace** leads
+to wallet connection and the existing find/create tasks. Returning to the overview
+preserves the workspace, its unsent inputs and any transaction receipt in memory.
+No wallet request or invoice lookup occurs just from opening the landing page.
+
+[Open the hosted testnet demo](https://invoicepay-testnet.vercel.app/). The overview
+is the default view; choose **Open invoice workspace**, then connect a testnet
+wallet and select **Find an invoice** or **Create an invoice**. These views stay
+within the same URL. Hosting and wallet connection alone do not verify a signed
+payment flow.
 Implemented flows: create, invoice/receipt lookup, partial payment, cancellation
 before any payment, and freelancer refunds. The app uses the sibling contract's
 actual six-method ABI. Tokens move directly between payer and freelancer.
@@ -63,6 +73,8 @@ upgrade was applied.
 ## Source and limitations
 
 - [Workspace UI](src/pages/Workspace.tsx) exposes implemented contract actions.
+- [Landing page](src/pages/Landing.tsx) introduces the flow with an original local
+  SVG still life. [Design notes](docs/DESIGN.md) record the visual and accessibility choices.
 - [Contract client](src/lib/contract.ts) simulates and assembles reads and writes,
   returning confirmed transaction hashes with explorer links.
 - [Write flow](src/lib/flow.ts) checks testnet twice and rejects abandoned sessions

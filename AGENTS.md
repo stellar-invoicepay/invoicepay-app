@@ -1,5 +1,16 @@
 # AGENTS.md
 
+## Authorized hosted frontend demonstration - October 9, 2026
+
+The maintainer authorized agent-managed Vercel hosting and a premium landing-page
+and workspace redesign for the existing synthetic testnet demonstration.
+The hosted app is https://invoicepay-testnet.vercel.app.
+This narrow authorization covers frontend hosting only; testnet-only safeguards
+and truthful pilot reporting remain. Browser-wallet business flows have not yet
+been validated. The hosted frontend and verified contract demonstration do not
+establish a real-business pilot. Earlier undeployed statements describe the
+state before the synthetic demonstration, not the current hosted frontend.
+
 Rules for any AI agent working in this repository (`invoicepay-app`). Read this file at the start of every task.
 
 ## Project context
