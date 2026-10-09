@@ -1,5 +1,10 @@
 # InvoicePay app
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="public/brand/logo-dark.svg">
+  <img src="public/brand/logo.svg" alt="InvoicePay" height="72">
+</picture>
+
 A Vite, React and TypeScript workspace for opaque invoices on Stellar testnet.
 Implemented flows: create, invoice/receipt lookup, partial payment, cancellation
 before any payment, and freelancer refunds. The app uses the sibling contract's
