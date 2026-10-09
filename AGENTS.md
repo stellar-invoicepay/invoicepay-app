@@ -4,7 +4,7 @@
 
 The maintainer authorized agent-managed Vercel hosting and a premium landing-page
 and workspace redesign for the existing synthetic testnet demonstration.
-The hosted app is https://invoicepay-testnet.vercel.app.
+The hosted app is https://invoicepay-testnet-xteesamz.vercel.app.
 This narrow authorization covers frontend hosting only; testnet-only safeguards
 and truthful pilot reporting remain. Browser-wallet business flows have not yet
 been validated. The hosted frontend and verified contract demonstration do not

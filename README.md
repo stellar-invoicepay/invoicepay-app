@@ -11,7 +11,7 @@ to wallet connection and the existing find/create tasks. Returning to the overvi
 preserves the workspace, its unsent inputs and any transaction receipt in memory.
 No wallet request or invoice lookup occurs just from opening the landing page.
 
-[Open the hosted testnet demo](https://invoicepay-testnet.vercel.app/). The overview
+[Open the hosted testnet demo](https://invoicepay-testnet-xteesamz.vercel.app/). The overview
 is the default view; choose **Open invoice workspace**, then connect a testnet
 wallet and select **Find an invoice** or **Create an invoice**. These views stay
 within the same URL. Hosting and wallet connection alone do not verify a signed
